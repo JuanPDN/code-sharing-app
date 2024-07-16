@@ -13,6 +13,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "monaco-editor": "^0.50.0",
     "vue": "^3.4.29"
   },
   "devDependencies": {
