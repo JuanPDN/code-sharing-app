@@ -1,14 +1,18 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+import { defaultCode } from '@/utils/defaultCode';
+import ButtonsEditor from '@/components/ButtonsEditor.vue';
 
 const monacoEditor = ref<HTMLElement | null>(null);
+
 
 onMounted(() => {
     if (monacoEditor.value) {
         monaco.editor.create(monacoEditor.value, {
-            value: 'Hello, World!',
-            language: 'HTML',
+            value: defaultCode,
+            language: 'html',
+            automaticLayout: true
         })
     }
 })
@@ -18,23 +22,29 @@ onMounted(() => {
 <template>
     <div class="container">
         <div ref="monacoEditor" class="monaco"></div>
+        <ButtonsEditor />
     </div>
 </template>
 
 <style scoped>
 .container {
-    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     max-width: 880px;
+    width: 100%;
+    height: 720px;
     margin: 0px 8px 80px 8px;
-    padding: 24px 16px 16px 16px;
+    padding-top: 24px;
     background: rgb(255, 255, 254);
     border-radius: 8px;
     box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
-
 .monaco {
+    height: 100%;
     width: 100%;
-    height: 720px;
+    padding-right: 16px;
+
 }
 </style>
