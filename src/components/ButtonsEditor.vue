@@ -5,6 +5,8 @@
                 <option value="html">HTML</option>
                 <option value="css">CSS</option>
                 <option value="javascript">Javascript</option>
+                <option value="typescript">Typescript</option>
+                <option value="json">Json</option>
             </select>
             <select name="theme" id="theme">
                 <option value="vs-ligth">Light</option>
