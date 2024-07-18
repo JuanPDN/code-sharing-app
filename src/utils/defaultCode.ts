@@ -1,5 +1,5 @@
 export const defaultCode: string =
-    `<html>
+  `<html>
   <head>
     <title>HTML Sample</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,5 +16,4 @@ export const defaultCode: string =
     <h1>Heading No.1</h1>
     <input disabled type="button" value="Click me" />
   </body>
-</html>
-`
+</html>`
