@@ -1,6 +1,6 @@
 <template>
     <header>
-        <img src="@/assets/NoteCodeLogo.svg" alt="NoteCode logo" class="logo">
+        <img src="@/assets/NoteCodeLogo.svg" alt="NoteCode logo" class="logo" height="20" width="111">
         <div>
             <h1>Create & Share</h1>
             <h2>Your Code easily</h2>

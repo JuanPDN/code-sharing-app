@@ -15,7 +15,7 @@
         </div>
         <div>
             <button class="btn-share">
-                <img src="@/assets/Share.svg" alt="">
+                <img src="@/assets/Share.svg" alt="share" height="16" width="16">
                 <span>Share</span>
             </button>
         </div>
