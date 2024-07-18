@@ -1,6 +1,9 @@
 <script setup lang="ts">
+import '@/utils/workers'
+
 import { ref, onMounted } from 'vue';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+
 import { defaultCode } from '@/utils/defaultCode';
 import ButtonsEditor from '@/components/ButtonsEditor.vue';
 
