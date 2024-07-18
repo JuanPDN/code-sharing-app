@@ -1,0 +1,64 @@
+<template>
+    <section>
+        <div class="btns-select">
+            <select name="language" id="language">
+                <option value="html">HTML</option>
+                <option value="css">CSS</option>
+                <option value="javascript">Javascript</option>
+            </select>
+            <select name="theme" id="theme">
+                <option value="vs-ligth">Light</option>
+                <option value="vs-dark">VS Dark</option>
+            </select>
+        </div>
+        <div>
+            <button class="btn-share">
+                <img src="@/assets/Share.svg" alt="">
+                <span>Share</span>
+            </button>
+        </div>
+    </section>
+</template>
+
+<style scoped>
+select {
+    appearance: none;
+    font-weight: 600;
+    font-size: 10px;
+    padding: 4px 24px 4px 12px;
+    background: #CED6E1 url('@/assets/down-arrow.svg') no-repeat calc(100% - 8px) center;
+    color: #364153;
+    border: none;
+    outline: none;
+    border-radius: 15px;
+}
+
+
+section {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    padding: 0px 16px 16px 16px;
+}
+
+.btn-share {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: #FFFFFE;
+    background-color: #406AFF;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+}
+
+.btns-select {
+    display: flex;
+    gap: 12px;
+}
+</style>
