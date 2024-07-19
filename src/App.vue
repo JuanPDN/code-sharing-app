@@ -26,7 +26,7 @@ import HeaderApp from '@/components/HeaderApp.vue'
 
 @media (min-width: 1280px) {
   .bg-hero {
-    background-size: cover;
+    background-size: contain;
   }
 }
 </style>
