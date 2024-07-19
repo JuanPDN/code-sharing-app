@@ -1,3 +1,14 @@
+<script setup lang="ts">
+
+const emit = defineEmits(['update:themeSelected'])
+// emit('themeSelected', 'vs-dark from ButtonsEditor.vue')
+const setTheme = (theme: Event) => {
+    const themeSelect = theme.target as HTMLSelectElement
+    emit('update:themeSelected', themeSelect.value)
+}
+
+</script>
+
 <template>
     <section>
         <div class="btns-select">
@@ -8,9 +19,10 @@
                 <option value="typescript">Typescript</option>
                 <option value="json">Json</option>
             </select>
-            <select name="theme" id="theme">
-                <option value="vs-ligth">Light</option>
+            <select name="theme" id="theme" @change="setTheme($event)">
+                <option value="vs-light">Light</option>
                 <option value="vs-dark">VS Dark</option>
+                <option value="hc-black">HC Dark</option>
             </select>
         </div>
         <div>
