@@ -8,15 +8,16 @@ import { defaultCode } from '@/utils/defaultCode';
 import ButtonsEditor from '@/components/ButtonsEditor.vue';
 
 const monacoEditor = ref<HTMLElement | null>(null);
-const editor = ref<monaco.editor.IStandaloneCodeEditor | null>(null);
+let editor: monaco.editor.IStandaloneCodeEditor | null = null;
 const theme = ref('vs-light');
+const language = ref('html');
 
 
 onMounted(() => {
     if (monacoEditor.value) {
-        editor.value = monaco.editor.create(monacoEditor.value, {
+        editor = monaco.editor.create(monacoEditor.value, {
             value: defaultCode,
-            language: 'html',
+            language: language.value,
             automaticLayout: true,
             theme: theme.value
         })
@@ -24,8 +25,8 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
-    if (editor.value) {
-        editor.value.dispose();
+    if (editor) {
+        editor.dispose();
     }
 })
 
@@ -33,15 +34,25 @@ const updateTheme = (event: string) => {
     theme.value = event
 }
 
-watch(theme, () => {
-    editor.value?.updateOptions({ theme: theme.value })
+const updateLanguage = (event: string) => {
+    language.value = event
+}
+
+watch(theme, (theme) => editor!.updateOptions({ theme: theme }))
+
+watch(language, () => {
+    if (editor) {
+        monaco.editor.setModelLanguage(editor.getModel()!, language.value)
+    }
 })
+
 </script>
 
 <template>
     <div class="container" :class="theme">
-        <div ref="monacoEditor" class="monaco"></div>
-        <ButtonsEditor @update:theme-selected="updateTheme($event)" />
+        <div ref="monacoEditor" data-lang="html" class="monaco"></div>
+        <ButtonsEditor @update:theme-selected="updateTheme($event)"
+            @update:language-selected="updateLanguage($event)" />
     </div>
 </template>
 

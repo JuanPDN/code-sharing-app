@@ -1,10 +1,15 @@
 <script setup lang="ts">
 
-const emit = defineEmits(['update:themeSelected'])
-// emit('themeSelected', 'vs-dark from ButtonsEditor.vue')
+const emit = defineEmits(['update:theme-selected', 'update:language-selected'])
+
 const setTheme = (theme: Event) => {
     const themeSelect = theme.target as HTMLSelectElement
-    emit('update:themeSelected', themeSelect.value)
+    emit('update:theme-selected', themeSelect.value)
+}
+
+const setLanguage = (language: Event) => {
+    const languageSelect = language.target as HTMLSelectElement
+    emit('update:language-selected', languageSelect.value)
 }
 
 </script>
@@ -12,7 +17,7 @@ const setTheme = (theme: Event) => {
 <template>
     <section>
         <div class="btns-select">
-            <select name="language" id="language">
+            <select name="language" id="language" @change="setLanguage($event)">
                 <option value="html">HTML</option>
                 <option value="css">CSS</option>
                 <option value="javascript">Javascript</option>
