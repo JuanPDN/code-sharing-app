@@ -1,6 +1,12 @@
 <script setup lang="ts">
 
-const emit = defineEmits(['update:theme-selected', 'update:language-selected'])
+
+const emit = defineEmits(['update:theme-selected', 'update:language-selected']);
+const props = defineProps({
+    value: String,
+    theme: String,
+    laguage: String
+})
 
 const setTheme = (theme: Event) => {
     const themeSelect = theme.target as HTMLSelectElement
@@ -10,6 +16,17 @@ const setTheme = (theme: Event) => {
 const setLanguage = (language: Event) => {
     const languageSelect = language.target as HTMLSelectElement
     emit('update:language-selected', languageSelect.value)
+}
+
+const share = () => {
+    const { value, theme, laguage } = props
+    return console.log(
+        {
+            id: crypto.randomUUID().split('-')[4],
+            code: value,
+            theme: theme,
+            language: laguage
+        });
 }
 
 </script>
@@ -31,7 +48,7 @@ const setLanguage = (language: Event) => {
             </select>
         </div>
         <div>
-            <button class="btn-share">
+            <button class="btn-share" @click="share">
                 <img src="@/assets/Share.svg" alt="share" height="16" width="16">
                 <span>Share</span>
             </button>
@@ -44,7 +61,7 @@ select {
     appearance: none;
     font-weight: 600;
     font-size: 10px;
-    padding: 4px 24px 4px 12px;
+    padding: 6px 24px 6px 12px;
     background: #CED6E1 url('@/assets/down-arrow.svg') no-repeat calc(100% - 8px) center;
     color: #364153;
     border: none;

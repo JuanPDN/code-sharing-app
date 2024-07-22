@@ -11,15 +11,20 @@ const monacoEditor = ref<HTMLElement | null>(null);
 let editor: monaco.editor.IStandaloneCodeEditor | null = null;
 const theme = ref('vs-light');
 const language = ref('html');
+const code = ref(defaultCode);
 
 
 onMounted(() => {
     if (monacoEditor.value) {
         editor = monaco.editor.create(monacoEditor.value, {
-            value: defaultCode,
+            value: code.value,
             language: language.value,
             automaticLayout: true,
             theme: theme.value
+        })
+
+        editor.onDidChangeModelContent(() => {
+            code.value = editor!.getValue();
         })
     }
 })
@@ -38,8 +43,8 @@ const updateLanguage = (event: string) => {
     language.value = event
 }
 
-watch(theme, (theme) => editor!.updateOptions({ theme: theme }))
 
+watch(theme, (theme) => editor!.updateOptions({ theme: theme }))
 watch(language, () => {
     if (editor) {
         monaco.editor.setModelLanguage(editor.getModel()!, language.value)
@@ -51,7 +56,7 @@ watch(language, () => {
 <template>
     <div class="container" :class="theme">
         <div ref="monacoEditor" data-lang="html" class="monaco"></div>
-        <ButtonsEditor @update:theme-selected="updateTheme($event)"
+        <ButtonsEditor @update:theme-selected="updateTheme($event)" :theme="theme" :laguage="language" :value="code"
             @update:language-selected="updateLanguage($event)" />
     </div>
 </template>
