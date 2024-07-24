@@ -20,6 +20,11 @@ onMounted(() => {
             value: code.value,
             language: language.value,
             automaticLayout: true,
+            scrollbar: {
+                vertical: 'auto',
+            },
+            hideCursorInOverviewRuler: true,
+            overviewRulerBorder: false,
             theme: theme.value
         })
 
