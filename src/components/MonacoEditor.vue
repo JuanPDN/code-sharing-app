@@ -19,13 +19,13 @@ onMounted(() => {
         editor = monaco.editor.create(monacoEditor.value, {
             value: code.value,
             language: language.value,
+            theme: theme.value,
             automaticLayout: true,
             scrollbar: {
                 vertical: 'auto',
             },
             hideCursorInOverviewRuler: true,
             overviewRulerBorder: false,
-            theme: theme.value
         })
 
         editor.onDidChangeModelContent(() => {
