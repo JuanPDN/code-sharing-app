@@ -1,32 +1,6 @@
-<script setup lang="ts">
-import MonacoEditor from '@/components/MonacoEditor.vue'
-import HeaderApp from '@/components/HeaderApp.vue'
+<script setup>
+import { RouterView } from 'vue-router';
 </script>
-
 <template>
-  <div class="bg-hero">
-    <HeaderApp />
-    <MonacoEditor />
-  </div>
-
+  <RouterView />
 </template>
-
-<style scoped>
-.bg-hero {
-  height: 100%;
-  background: url('@/assets/Hero-Background-notecode.svg') no-repeat;
-  background-position: center top;
-  color: #121826;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 0px 8px;
-}
-
-@media (min-width: 1280px) {
-  .bg-hero {
-    background-size: contain;
-  }
-}
-</style>
