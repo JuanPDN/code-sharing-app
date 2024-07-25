@@ -34,14 +34,14 @@ const share = () => {
 <template>
     <section>
         <div class="btns-select">
-            <select name="language" id="language" @change="setLanguage($event)">
+            <select :value="laguage" name="language" id="language" @change="setLanguage($event)">
                 <option value="html">HTML</option>
                 <option value="css">CSS</option>
                 <option value="javascript">Javascript</option>
                 <option value="typescript">Typescript</option>
                 <option value="json">Json</option>
             </select>
-            <select name="theme" id="theme" @change="setTheme($event)">
+            <select :value="theme" name="theme" id="theme" @change="setTheme($event)">
                 <option value="vs-light">Light</option>
                 <option value="vs-dark">VS Dark</option>
                 <option value="hc-black">HC Dark</option>
