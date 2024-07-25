@@ -6,6 +6,7 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
 import { defaultCode } from '@/utils/defaultCode';
 import ButtonsEditor from '@/components/ButtonsEditor.vue';
+import { useRoute, useRouter } from 'vue-router';
 
 const monacoEditor = ref<HTMLElement | null>(null);
 let editor: monaco.editor.IStandaloneCodeEditor | null = null;
@@ -13,8 +14,33 @@ const theme = ref('vs-light');
 const language = ref('html');
 const code = ref(defaultCode);
 
+const route = useRoute();
+const router = useRouter();
+const id = route.params.id;
 
-onMounted(() => {
+const fetchCode = async (codeId: string) => {
+    try {
+        const response = await fetch(`http://localhost:3000/api/code/${codeId}`, { method: 'GET' });
+        const data = await response.json();
+        if (!data.message) {
+            return data
+        } else {
+            router.push({ name: 'home' });
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+onMounted(async () => {
+    if (id) {
+        const data = await fetchCode(id.toString());
+        if (data) {
+            code.value = data.code
+            language.value = data.language
+            theme.value = data.theme
+        }
+    }
     if (monacoEditor.value) {
         editor = monaco.editor.create(monacoEditor.value, {
             value: code.value,
@@ -47,7 +73,6 @@ const updateTheme = (event: string) => {
 const updateLanguage = (event: string) => {
     language.value = event
 }
-
 
 watch(theme, (theme) => editor!.updateOptions({ theme: theme }))
 watch(language, () => {
