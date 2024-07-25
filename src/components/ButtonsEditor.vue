@@ -1,6 +1,9 @@
 <script setup lang="ts">
+import { useRoute, useRouter } from 'vue-router';
 
 
+const route = useRoute()
+const router = useRouter()
 const emit = defineEmits(['update:theme-selected', 'update:language-selected']);
 const props = defineProps({
     value: String,
@@ -18,15 +21,34 @@ const setLanguage = (language: Event) => {
     emit('update:language-selected', languageSelect.value)
 }
 
-const share = () => {
+const share = async () => {
     const { value, theme, laguage } = props
-    return console.log(
-        {
-            id: crypto.randomUUID().split('-')[4],
-            code: value,
-            theme: theme,
-            language: laguage
-        });
+    const id = route.params.id
+    if (id) {
+        await fetch(`http://localhost:3000/api/code/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                code: value,
+                theme: theme,
+                language: laguage
+            })
+        })
+    } else {
+        await fetch(`http://localhost:3000/api/code`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                code: value,
+                theme: theme,
+                language: laguage
+            })
+        }).then((data) => {
+            data.json().then((data) => {
+                router.push({ name: 'code', params: { id: data } })
+            })
+        })
+    }
 }
 
 </script>

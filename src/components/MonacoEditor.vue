@@ -20,15 +20,15 @@ const id = route.params.id;
 
 const fetchCode = async (codeId: string) => {
     try {
-        const response = await fetch(`http://localhost:3000/api/code/${codeId}`, { method: 'GET' });
+        const response = await fetch(`http://localhost:3000/api/code/${codeId}`);
         const data = await response.json();
-        if (!data.message) {
+        if (data) {
             return data
         } else {
             router.push({ name: 'home' });
         }
     } catch (error) {
-        console.error(error);
+        router.push({ name: 'home' });
     }
 }
 
