@@ -47,6 +47,9 @@ onMounted(async () => {
             language: language.value,
             theme: theme.value,
             automaticLayout: true,
+            minimap: {
+                autohide: visualViewport!.width < 640,
+            },
             scrollbar: {
                 vertical: 'auto',
             },
