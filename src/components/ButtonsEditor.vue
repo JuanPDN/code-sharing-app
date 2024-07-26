@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router';
+import { ref } from 'vue';
 
-
+const textToCopy = ref<HTMLElement | null>(null)
 const route = useRoute()
 const router = useRouter()
 const emit = defineEmits(['update:theme-selected', 'update:language-selected']);
@@ -10,6 +11,8 @@ const props = defineProps({
     theme: String,
     laguage: String
 })
+
+const initialValue = ref("")
 
 const setTheme = (theme: Event) => {
     const themeSelect = theme.target as HTMLSelectElement
@@ -21,9 +24,15 @@ const setLanguage = (language: Event) => {
     emit('update:language-selected', languageSelect.value)
 }
 
+const copy = () => {
+    const fullPath = window.location.origin + route.fullPath
+    navigator.clipboard.writeText(fullPath)
+}
+
 const share = async () => {
     const { value, theme, laguage } = props
     const id = route.params.id
+    initialValue.value = value!
     if (id) {
         await fetch(`http://localhost:3000/api/code/${id}`, {
             method: 'PUT',
@@ -49,6 +58,7 @@ const share = async () => {
             })
         })
     }
+    copy()
 }
 
 </script>
@@ -69,8 +79,15 @@ const share = async () => {
                 <option value="hc-black">HC Dark</option>
             </select>
         </div>
-        <div>
-            <button class="btn-share" @click="share">
+        <div class="container-btns">
+            <div v-if="route.params.id">
+                <button class="btn-copy" @click="copy">
+                    <img src="@/assets/link.svg" alt="link" height="24" width="24">
+                    <span :class="theme !== 'vs-light' && 'dark'" ref="textToCopy">...{{
+                        $route.fullPath }}</span>
+                </button>
+            </div>
+            <button class="btn-share" @click="share" :disabled="initialValue === value">
                 <img src="@/assets/Share.svg" alt="share" height="16" width="16">
                 <span>Share</span>
             </button>
@@ -79,6 +96,41 @@ const share = async () => {
 </template>
 
 <style scoped>
+.container-btns {
+    display: flex;
+    align-items: end;
+    gap: 16px;
+}
+
+.btn-copy {
+    padding: 5px 0px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    appearance: none;
+    border: none;
+    background-color: transparent;
+    font-size: 10px;
+    font-weight: 600;
+    color: rgba(54, 65, 82, 0.7);
+    cursor: copy;
+}
+
+.btn-copy span {
+    display: none;
+}
+
+.dark {
+    color: rgb(102, 116, 137);
+}
+
+@media (min-width: 550px) {
+    .btn-copy span {
+        display: block;
+    }
+}
+
+
 select {
     appearance: none;
     font-weight: 600;
@@ -90,7 +142,6 @@ select {
     outline: none;
     border-radius: 15px;
 }
-
 
 section {
     width: 100%;
@@ -113,6 +164,11 @@ section {
     border-radius: 25px;
     border: none;
     cursor: pointer;
+}
+
+.btn-share:disabled {
+    background-color: rgb(104, 115, 138);
+    cursor: not-allowed;
 }
 
 .btns-select {
