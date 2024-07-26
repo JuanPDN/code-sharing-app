@@ -5,6 +5,7 @@ import { ref } from 'vue';
 const textToCopy = ref<HTMLElement | null>(null)
 const route = useRoute()
 const router = useRouter()
+const id = route.params.id
 const emit = defineEmits(['update:theme-selected', 'update:language-selected']);
 const props = defineProps({
     value: String,
@@ -12,7 +13,8 @@ const props = defineProps({
     laguage: String
 })
 
-const initialValue = ref("")
+const initialValue = ref(id ? props.value : '')
+
 
 const setTheme = (theme: Event) => {
     const themeSelect = theme.target as HTMLSelectElement
@@ -31,7 +33,6 @@ const copy = () => {
 
 const share = async () => {
     const { value, theme, laguage } = props
-    const id = route.params.id
     initialValue.value = value!
     if (id) {
         await fetch(`http://localhost:3000/api/code/${id}`, {
