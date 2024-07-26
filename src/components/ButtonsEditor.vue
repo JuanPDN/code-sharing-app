@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 const textToCopy = ref<HTMLElement | null>(null)
 const route = useRoute()
@@ -14,6 +14,15 @@ const props = defineProps({
 })
 
 const initialValue = ref(id ? props.value : '')
+const initialTheme = ref(id ? props.theme : '')
+const initialLanguage = ref(id ? props.laguage : '')
+
+
+const isDisabled = computed(() => (
+    initialValue.value === props.value &&
+    initialTheme.value === props.theme &&
+    initialLanguage.value === props.laguage
+))
 
 
 const setTheme = (theme: Event) => {
@@ -33,7 +42,9 @@ const copy = () => {
 
 const share = async () => {
     const { value, theme, laguage } = props
-    initialValue.value = value!
+    initialValue.value = value
+    initialTheme.value = theme
+    initialLanguage.value = laguage
     if (id) {
         await fetch(`http://localhost:3000/api/code/${id}`, {
             method: 'PUT',
@@ -88,7 +99,7 @@ const share = async () => {
                         $route.fullPath }}</span>
                 </button>
             </div>
-            <button class="btn-share" @click="share" :disabled="initialValue === value">
+            <button class="btn-share" @click="share" :disabled="isDisabled">
                 <img src="@/assets/Share.svg" alt="share" height="16" width="16">
                 <span>Share</span>
             </button>
