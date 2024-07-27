@@ -34,12 +34,10 @@ const fetchCode = async (codeId: string) => {
 
 onMounted(async () => {
     if (id) {
-        const data = await fetchCode(id.toString());
-        if (data) {
-            code.value = data.code
-            language.value = data.language
-            theme.value = data.theme
-        }
+        const data = await fetchCode(id.toString())
+        code.value = data.code
+        theme.value = data.theme
+        language.value = data.language
     }
     if (monacoEditor.value) {
         editor = monaco.editor.create(monacoEditor.value, {
@@ -88,9 +86,9 @@ watch(language, () => {
 
 <template>
     <div class="container" :class="theme">
-        <div ref="monacoEditor" data-lang="html" class="monaco"></div>
-        <ButtonsEditor @update:theme-selected="updateTheme($event)" :theme="theme" :laguage="language" :value="code"
-            @update:language-selected="updateLanguage($event)" />
+        <div ref="monacoEditor" class="monaco"></div>
+        <ButtonsEditor @update:theme-selected="updateTheme" @update:language-selected="updateLanguage" :theme="theme"
+            :language="language" :code="code" />
     </div>
 </template>
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 const textToCopy = ref<HTMLElement | null>(null)
 const route = useRoute()
@@ -8,22 +8,20 @@ const router = useRouter()
 const id = route.params.id
 const emit = defineEmits(['update:theme-selected', 'update:language-selected']);
 const props = defineProps({
-    value: String,
+    code: String,
     theme: String,
-    laguage: String
+    language: String
 })
 
-const initialValue = ref(id ? props.value : '')
+const initialCode = ref(id ? props.code : '')
 const initialTheme = ref(id ? props.theme : '')
-const initialLanguage = ref(id ? props.laguage : '')
-
+const initialLanguage = ref(id ? props.language : '')
 
 const isDisabled = computed(() => (
-    initialValue.value === props.value &&
+    initialCode.value === props.code &&
     initialTheme.value === props.theme &&
-    initialLanguage.value === props.laguage
+    initialLanguage.value === props.language
 ))
-
 
 const setTheme = (theme: Event) => {
     const themeSelect = theme.target as HTMLSelectElement
@@ -41,30 +39,18 @@ const copy = () => {
 }
 
 const share = async () => {
-    const { value, theme, laguage } = props
-    initialValue.value = value
+    const { code, theme, language } = props
+    initialCode.value = code
     initialTheme.value = theme
-    initialLanguage.value = laguage
+    initialLanguage.value = language
+
+    const body = JSON.stringify({ code, theme, language })
+    const optionsFetch = { method: id ? 'PUT' : 'POST', headers: { 'Content-Type': 'application/json' }, body }
+
     if (id) {
-        await fetch(`http://localhost:3000/api/code/${id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                code: value,
-                theme: theme,
-                language: laguage
-            })
-        })
+        await fetch(`http://localhost:3000/api/code/${id}`, optionsFetch)
     } else {
-        await fetch(`http://localhost:3000/api/code`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                code: value,
-                theme: theme,
-                language: laguage
-            })
-        }).then((data) => {
+        await fetch(`http://localhost:3000/api/code`, optionsFetch).then((data) => {
             data.json().then((data) => {
                 router.push({ name: 'code', params: { id: data } })
             })
@@ -72,13 +58,18 @@ const share = async () => {
     }
     copy()
 }
+watch(props, (newProps) => {
+    initialCode.value = newProps.code;
+    initialTheme.value = newProps.theme;
+    initialLanguage.value = newProps.language;
+}, { once: true });
 
 </script>
 
 <template>
     <section>
         <div class="btns-select">
-            <select :value="laguage" name="language" id="language" @change="setLanguage($event)">
+            <select :value="language" name="language" id="language" @change="setLanguage($event)">
                 <option value="html">HTML</option>
                 <option value="css">CSS</option>
                 <option value="javascript">Javascript</option>
