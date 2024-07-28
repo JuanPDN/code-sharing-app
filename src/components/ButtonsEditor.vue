@@ -55,11 +55,13 @@ const share = async () => {
 
     const body = JSON.stringify({ code, theme, language })
     const optionsFetch = { method: id ? 'PUT' : 'POST', headers: { 'Content-Type': 'application/json' }, body }
+    const api_url = import.meta.env.VITE_API_URL
+
 
     if (id) {
-        await fetch(`http://localhost:3000/api/code/${id}`, optionsFetch)
+        await fetch(`${api_url}${id}`, optionsFetch)
     } else {
-        await fetch(`http://localhost:3000/api/code`, optionsFetch).then((data) => {
+        await fetch(api_url, optionsFetch).then((data) => {
             data.json().then((data) => {
                 router.push({ name: 'code', params: { id: data } })
             })

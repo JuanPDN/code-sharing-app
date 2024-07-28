@@ -13,14 +13,14 @@ let editor: monaco.editor.IStandaloneCodeEditor | null = null;
 const theme = ref('vs-light');
 const language = ref('html');
 const code = ref(defaultCode);
-
+const api_url = import.meta.env.VITE_API_URL
 const route = useRoute();
 const router = useRouter();
 const id = route.params.id;
 
 const fetchCode = async (codeId: string) => {
     try {
-        const response = await fetch(`http://localhost:3000/api/code/${codeId}`);
+        const response = await fetch(`${api_url}${codeId}`);
         const data = await response.json();
         if (data) {
             return data
