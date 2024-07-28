@@ -35,7 +35,16 @@ const setLanguage = (language: Event) => {
 
 const copy = () => {
     const fullPath = window.location.origin + route.fullPath
-    navigator.clipboard.writeText(fullPath)
+    if (textToCopy.value) {
+        navigator.clipboard.writeText(fullPath).then(() => {
+            textToCopy.value!.textContent = 'Copied to clipboard!'
+        }).catch(() => {
+            alert('Failed to copy!')
+        })
+        setTimeout(() => {
+            textToCopy.value!.textContent = `...${route.fullPath}`
+        }, 1500);
+    }
 }
 
 const share = async () => {
