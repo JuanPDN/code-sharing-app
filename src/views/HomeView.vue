@@ -13,7 +13,7 @@ import HeaderApp from '@/components/HeaderApp.vue'
 <style scoped>
 .bg-hero {
     height: 100%;
-    background: url('@/assets/Hero-Background-notecode@2x.png') no-repeat;
+    background: url('@/assets/Hero-Background-notecode.svg') no-repeat;
     background-position: center top;
     color: #121826;
     display: flex;
