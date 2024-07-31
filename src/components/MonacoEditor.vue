@@ -94,7 +94,7 @@ watch(language, () => {
     margin: 0px 8px 80px 8px;
     padding-top: 24px;
     border-radius: 8px;
-    box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
 .vs-light {
