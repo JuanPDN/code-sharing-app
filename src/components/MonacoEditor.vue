@@ -28,7 +28,7 @@ onMounted(async () => {
     if (id) {
         try {
             const data = await fetchCode(id.toString())
-            code.value = data.code
+            code.value = data.code + " "
             theme.value = data.theme
             language.value = data.language
         } catch (error) {
