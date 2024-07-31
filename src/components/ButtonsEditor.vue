@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router';
 import { computed, ref, watch } from 'vue';
+import ShareWindow from '@/components/ShareWindow.vue';
 
 const textToCopy = ref<HTMLElement | null>(null)
 const route = useRoute()
 const router = useRouter()
-const id = route.params.id
+const id = ref(route.params.id)
 const emit = defineEmits(['update:theme-selected', 'update:language-selected']);
 const props = defineProps({
     code: String,
@@ -13,14 +14,16 @@ const props = defineProps({
     language: String
 })
 
-const initialCode = ref(id ? props.code : '')
-const initialTheme = ref(id ? props.theme : '')
-const initialLanguage = ref(id ? props.language : '')
+const initialCode = ref(id.value ? props.code : '')
+const initialTheme = ref(id.value ? props.theme : '')
+const initialLanguage = ref(id.value ? props.language : '')
+const isShareVisible = ref(false)
 
 const isDisabled = computed(() => (
     initialCode.value === props.code &&
     initialTheme.value === props.theme &&
-    initialLanguage.value === props.language
+    initialLanguage.value === props.language &&
+    route.params.id !== undefined
 ))
 
 const setTheme = (theme: Event) => {
@@ -38,13 +41,18 @@ const copy = () => {
     if (textToCopy.value) {
         navigator.clipboard.writeText(fullPath).then(() => {
             textToCopy.value!.textContent = 'Copied to clipboard!'
-        }).catch(() => {
+        }).catch((error) => {
+            console.error(error)
             alert('Failed to copy!')
         })
         setTimeout(() => {
             textToCopy.value!.textContent = `...${route.fullPath}`
         }, 1500);
     }
+}
+
+const updateVisible = (value: boolean) => {
+    isShareVisible.value = value
 }
 
 const share = async () => {
@@ -54,20 +62,20 @@ const share = async () => {
     initialLanguage.value = language
 
     const body = JSON.stringify({ code, theme, language })
-    const optionsFetch = { method: id ? 'PUT' : 'POST', headers: { 'Content-Type': 'application/json' }, body }
+    const optionsFetch = { method: id.value ? 'PUT' : 'POST', headers: { 'Content-Type': 'application/json' }, body }
     const api_url = import.meta.env.VITE_API_URL
 
-
-    if (id) {
-        await fetch(`${api_url}${id}`, optionsFetch)
+    if (id.value) {
+        await fetch(`${api_url}${id.value}`, optionsFetch)
     } else {
         await fetch(api_url, optionsFetch).then((data) => {
             data.json().then((data) => {
+                id.value = data
                 router.push({ name: 'code', params: { id: data } })
             })
         })
     }
-    copy()
+    isShareVisible.value = true
 }
 watch(props, (newProps) => {
     initialCode.value = newProps.code;
@@ -107,6 +115,8 @@ watch(props, (newProps) => {
             </button>
         </div>
     </section>
+    <ShareWindow v-if="id" @update:isShareVisible="updateVisible" :fullPath=id.toString()
+        :isShareVisible="isShareVisible" />
 </template>
 
 <style scoped>

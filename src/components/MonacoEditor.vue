@@ -10,8 +10,8 @@ import { useRoute, useRouter } from 'vue-router';
 
 const monacoEditor = ref<HTMLElement | null>(null);
 let editor: monaco.editor.IStandaloneCodeEditor | null = null;
-const theme = ref('vs-light');
-const language = ref('html');
+const theme = ref("vs-light");
+const language = ref("html");
 const code = ref(defaultCode);
 const api_url = import.meta.env.VITE_API_URL
 const route = useRoute();
@@ -19,25 +19,21 @@ const router = useRouter();
 const id = route.params.id;
 
 const fetchCode = async (codeId: string) => {
-    try {
-        const response = await fetch(`${api_url}${codeId}`);
-        const data = await response.json();
-        if (data) {
-            return data
-        } else {
-            router.push({ name: 'home' });
-        }
-    } catch (error) {
-        router.push({ name: 'home' });
-    }
+    const response = await fetch(`${api_url}${codeId}`);
+    const data = await response.json();
+    return data
 }
 
 onMounted(async () => {
     if (id) {
-        const data = await fetchCode(id.toString())
-        code.value = data.code
-        theme.value = data.theme
-        language.value = data.language
+        try {
+            const data = await fetchCode(id.toString())
+            code.value = data.code
+            theme.value = data.theme
+            language.value = data.language
+        } catch (error) {
+            router.push({ name: 'home' });
+        }
     }
     if (monacoEditor.value) {
         editor = monaco.editor.create(monacoEditor.value, {
@@ -67,13 +63,8 @@ onBeforeUnmount(() => {
     }
 })
 
-const updateTheme = (event: string) => {
-    theme.value = event
-}
-
-const updateLanguage = (event: string) => {
-    language.value = event
-}
+const updateTheme = (event: string) => theme.value = event;
+const updateLanguage = (event: string) => language.value = event;
 
 watch(theme, (theme) => editor!.updateOptions({ theme: theme }))
 watch(language, () => {

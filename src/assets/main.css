@@ -26,3 +26,10 @@ body {
     border-radius: 5px;
     cursor: pointer;
 }
+
+button {
+    border: none;
+    appearance: none;
+    cursor: pointer;
+    outline: none;
+}
